@@ -54,6 +54,7 @@ const Login = () => {
                 <button
                   type="submit"
                   className="bg-red-500 rounded-2xl my-4 w-1/2 py-2 text-center "
+                  onClick={() => setsignIN(!signIN)}
                 >
                   Sign In
                 </button>

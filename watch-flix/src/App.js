@@ -1,12 +1,16 @@
 import "./App.css";
 import Header from "./components/Header";
 import Login from "./components/Login";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
 
 function App() {
   return (
     <>
-      <Header />
-      <Login />
+      <Provider store={appStore}>
+        <Header />
+        <Login />
+      </Provider>
     </>
   );
 }

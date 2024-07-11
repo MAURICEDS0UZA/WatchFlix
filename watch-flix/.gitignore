@@ -6,6 +6,10 @@
 .pnp.js
 
 # firebase 
+<<<<<<< HEAD
+=======
+/firebase
+>>>>>>> 06202b17fa6d1a84e6fd0e93112225e34b253d4a
 *.exe
 
 # testing

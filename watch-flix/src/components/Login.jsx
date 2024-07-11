@@ -1,5 +1,12 @@
 import { useRef, useState } from "react";
 import validateInput from "../utils/validateForm";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { USER_AVATAR } from "../utils/constant";
+import { auth } from "../utils/fibreBase";
 
 const Login = () => {
   const [signIn, setsignIn] = useState(true);
@@ -7,14 +14,53 @@ const Login = () => {
 
   const email = useRef(null);
   const password = useRef(null);
+  const name = useRef(null);
 
   const toggleSignInForm = () => {
     setsignIn(!signIn);
   };
+
   const handleValidation = () => {
-    console.log(email.current.value);
     const message = validateInput(email.current.value, password.current.value);
     seterrmessage(message);
+    if (message) return;
+
+    console.log(signIn);
+
+    if (!signIn) {
+      console.log("sign up ", signIn);
+      //* Signed up
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          seterrmessage(errorCode + "-" + errorMessage);
+        });
+    } else {
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          //* Signed in
+          const user = userCredential.user;
+          console.log("sign in", user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          seterrmessage(errorCode + "-" + errorMessage);
+        });
+    }
   };
 
   return (
@@ -38,6 +84,7 @@ const Login = () => {
                   id="name"
                   placeholder=" Enter user Name"
                   className="p-4 my-4 w-full bg-gray-700 rounded-lg"
+                  ref={name}
                 />
               </>
             )}
@@ -73,7 +120,6 @@ const Login = () => {
             {signIn ? (
               <div className=" flex justify-between flex-col sm:flex-row items-center">
                 <button
-                  type="submit"
                   className="bg-red-500 rounded-2xl my-4 w-1/2 py-2 text-center "
                   onClick={() => {
                     handleValidation();
@@ -87,7 +133,6 @@ const Login = () => {
               </div>
             ) : (
               <button
-                type="submit"
                 onClick={() => {
                   handleValidation();
                 }}

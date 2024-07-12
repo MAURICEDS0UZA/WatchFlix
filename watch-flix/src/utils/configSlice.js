@@ -7,10 +7,10 @@ const configSlice = createSlice({
   },
   reducers: {
     addUser: (state, action) => {
-      return (state.user = action.payload);
+      return action.payload;
     },
     removeUser: (state) => {
-      return (state.user = null);
+      return null;
     },
   },
 });

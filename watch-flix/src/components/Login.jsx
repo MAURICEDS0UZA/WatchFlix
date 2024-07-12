@@ -1,34 +1,39 @@
 import { useRef, useState } from "react";
 import validateInput from "../utils/validateForm";
+import { auth } from "../utils/fibreBase";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "../utils/configSlice";
+import useRandomImage from "../utils/useRandomImage";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { USER_AVATAR } from "../utils/constant";
-import { auth } from "../utils/fibreBase";
 
 const Login = () => {
   const [signIn, setsignIn] = useState(true);
   const [errmessage, seterrmessage] = useState(null);
 
+  const photo = useRandomImage();
+  const dispatch = useDispatch();
+  const UserSelector = useSelector((store) => store.user);
+
   const email = useRef(null);
   const password = useRef(null);
   const name = useRef(null);
 
+  // * toggle feat for sign
   const toggleSignInForm = () => {
     setsignIn(!signIn);
   };
 
   const handleValidation = () => {
+    // *Validating email * password
     const message = validateInput(email.current.value, password.current.value);
     seterrmessage(message);
     if (message) return;
 
-    console.log(signIn);
-
     if (!signIn) {
-      console.log("sign up ", signIn);
       //* Signed up
       createUserWithEmailAndPassword(
         auth,
@@ -37,6 +42,25 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
+          // *update user
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: photo,
+          })
+            .then(() => {
+              const { uid, email, displayName } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: user?.photoURL,
+                })
+              );
+            })
+            .catch((error) => {
+              seterrmessage(error);
+            });
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -44,21 +68,19 @@ const Login = () => {
           seterrmessage(errorCode + "-" + errorMessage);
         });
     } else {
+      //* Signed in
       signInWithEmailAndPassword(
         auth,
         email.current.value,
         password.current.value
       )
         .then((userCredential) => {
-          //* Signed in
           const user = userCredential.user;
-          console.log("sign in", user);
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          seterrmessage(errorCode + "-" + errorMessage);
+          seterrmessage(errorCode + "--" + errorMessage);
         });
     }
   };
@@ -71,7 +93,7 @@ const Login = () => {
           className="w-full max-w-xs sm:max-w-md   p-12 bg-opacity-80 bg-black  mx-auto right-0 left-0 text-white rounded-lg  "
         >
           <div className="flex flex-col">
-            {!signIn && (
+            {!signIn && !UserSelector && (
               <>
                 <label
                   htmlFor="name"
@@ -117,7 +139,7 @@ const Login = () => {
               ref={password}
             />
             <p>{errmessage}</p>
-            {signIn ? (
+            {signIn && !UserSelector ? (
               <div className=" flex justify-between flex-col sm:flex-row items-center">
                 <button
                   className="bg-red-500 rounded-2xl my-4 w-1/2 py-2 text-center "
@@ -145,7 +167,7 @@ const Login = () => {
               className="py-4 cursor-pointer font-mono"
               onClick={toggleSignInForm}
             >
-              {signIn
+              {signIn && !UserSelector
                 ? "New to Netflix? Sign Up Now"
                 : "Already registered? Sign In Now."}
             </p>

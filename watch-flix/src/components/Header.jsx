@@ -11,8 +11,8 @@ function Header() {
   const UserSelector = useSelector((store) => store.user);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user !== null) {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
         const { uid, email, displayName } = user;
@@ -24,12 +24,17 @@ function Header() {
             photoURL: auth?.currentUser?.photoURL,
           })
         );
-        // navigate("/Browser");
+        navigate("/Browser");
       } else {
         dispatch(removeUser());
         navigate("/");
       }
     });
+
+    // * unmount onAuthStateChanged
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   // *sign out user
@@ -40,7 +45,7 @@ function Header() {
         navigate("/");
       })
       .catch((error) => {
-        console.log("sign out error");
+        console.log("sign out error", error);
       });
   };
 
@@ -57,6 +62,7 @@ function Header() {
               src={UserSelector?.photoURL}
               alt="userImage"
             />
+            <p>{UserSelector?.displayName}</p>
             <button
               className="px-4 p-1 m-2 rounded-md text-white bg-red-500"
               onClick={(e) => {

@@ -6,8 +6,8 @@ import {
   createRoutesFromElements,
   Outlet,
   Route,
-  RouterProvider,
   Routes,
+  RouterProvider,
 } from "react-router-dom";
 import appStore from "./utils/appStore";
 import { Provider } from "react-redux";

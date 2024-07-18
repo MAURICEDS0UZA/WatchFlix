@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/fibreBase";
 import { addUser, removeUser } from "../utils/configSlice";
 
-function Header() {
+const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const UserSelector = useSelector((store) => store.user);
@@ -51,20 +51,24 @@ function Header() {
 
   return (
     <>
-      <div className="flex justify-around bg-gradient-to-b from-black  ">
+      <div className="flex justify-around bg-gradient-to-b from-black  items-center">
         <h1 className="text-red-500 font-extrabold font-mono text-3xl p-2 ">
           WatchFlix
         </h1>
         {UserSelector && (
-          <div className="flex">
-            <img
-              className="size-12 p-1 m-2  rounded-[30%]"
-              src={UserSelector?.photoURL}
-              alt="userImage"
-            />
-            <p>{UserSelector?.displayName}</p>
+          <div className="flex items-center">
+            <div className="flex flex-col  gap-3">
+              <img
+                className="size-10  m-4 relative rounded-[30%]"
+                src={UserSelector?.photoURL}
+                alt="userImage"
+              />
+              <p className="text-sm absolute top-14 pl-5">
+                {UserSelector?.displayName}
+              </p>
+            </div>
             <button
-              className="px-4 p-1 m-2 rounded-md text-white bg-red-500"
+              className="px-4 p-1 m-2 rounded-md text-white bg-red-500 h-10"
               onClick={(e) => {
                 e.preventDefault();
                 handleSignOut();
@@ -77,6 +81,6 @@ function Header() {
       </div>
     </>
   );
-}
+};
 
 export default Header;

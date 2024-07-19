@@ -8,11 +8,13 @@ const useRandomImage = () => {
   });
 
   const fetchData = async () => {
-    const res = await fetch("https://randomuser.me/api/");
-    const data = res.url;
-    setimage(data);
+    const res = await fetch("https://randomuser.me/api/portraits/2.jpg");
+    // const data = res.url;
+    // setimage(data);
+    const data = await res;
+    console.log(data);
   };
-  return image;
+  // return image;
 };
 
 export default useRandomImage;

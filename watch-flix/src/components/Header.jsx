@@ -51,7 +51,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex justify-around bg-gradient-to-b from-black  items-center">
+      <div className="flex justify-between bg-gradient-to-b from-black  items-center p-4">
         <h1 className="text-red-500 font-extrabold font-mono text-3xl p-2 ">
           WatchFlix
         </h1>

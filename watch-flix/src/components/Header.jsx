@@ -51,7 +51,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex justify-between bg-gradient-to-b from-black  items-center p-4">
+      <div className="flex justify-between bg-gradient-to-b from-black  top- items-center p-4">
         <h1 className="text-red-500 font-extrabold font-mono text-3xl p-2 ">
           WatchFlix
         </h1>
@@ -63,7 +63,7 @@ const Header = () => {
                 src={UserSelector?.photoURL}
                 alt="userImage"
               />
-              <p className="text-sm absolute top-14 pl-5">
+              <p className="text-sm absolute top-20 pl-5">
                 {UserSelector?.displayName}
               </p>
             </div>

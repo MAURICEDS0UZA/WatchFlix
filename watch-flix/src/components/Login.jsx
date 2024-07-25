@@ -3,18 +3,17 @@ import validateInput from "../utils/validateForm";
 import { auth } from "../utils/fibreBase";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/configSlice";
-import useRandomImage from "../utils/useRandomImage";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import { USER_AVATAR } from "../utils/constant";
 
 const Login = () => {
   const [signIn, setsignIn] = useState(true);
   const [errmessage, seterrmessage] = useState(null);
 
-  const photo = useRandomImage();
   const dispatch = useDispatch();
   const UserSelector = useSelector((store) => store.user);
 
@@ -45,21 +44,21 @@ const Login = () => {
           // *update user
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL: photo,
+            photoURL: USER_AVATAR,
           })
             .then(() => {
-              const { uid, email, displayName } = auth.currentUser;
+              const { uid, email, displayName, photoURL } = auth.currentUser;
               dispatch(
                 addUser({
                   uid: uid,
                   email: email,
                   displayName: displayName,
-                  photoURL: user?.photoURL,
+                  photoURL: photoURL,
                 })
               );
             })
             .catch((error) => {
-              seterrmessage(error);
+              seterrmessage(error.message);
             });
         })
         .catch((error) => {
@@ -93,7 +92,7 @@ const Login = () => {
           className="w-full max-w-xs sm:max-w-md   p-12 bg-opacity-80 bg-black  mx-auto right-0 left-0 text-white rounded-lg  "
         >
           <div className="flex flex-col">
-            {!signIn && !UserSelector && (
+            {!signIn && (
               <>
                 <label
                   htmlFor="name"
@@ -139,7 +138,7 @@ const Login = () => {
               ref={password}
             />
             <p>{errmessage}</p>
-            {signIn && !UserSelector ? (
+            {signIn ? (
               <div className=" flex justify-between flex-col sm:flex-row items-center">
                 <button
                   className="bg-red-500 rounded-2xl my-4 w-1/2 py-2 text-center "

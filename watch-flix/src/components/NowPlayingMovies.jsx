@@ -14,6 +14,7 @@ const NowPlayingMovies = () => {
           {selectMovies?.nowPlayingMovies?.map((movie) => {
             return movie?.original_title !== "Deadpool & Wolverine" ? (
               <img
+                loading="lazy"
                 src={`https://image.tmdb.org/t/p/w500//${movie?.poster_path}.jpg`}
                 alt=" card  Movie"
               />

@@ -11,7 +11,7 @@ const usePopularMovies = async () => {
 
   const getPopluarMovie = async () => {
     const res = await fetch(
-      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+      'https://api.themoviedb.org/3/movie/popular?language=en-US&page=2',
       Api_Option
     );
     const data = await res.json();

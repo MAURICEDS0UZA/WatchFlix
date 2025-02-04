@@ -9,3 +9,5 @@ export const Api_Option = {
       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzN2I1ZWNmOGM0YzVlM2YwN2UwNjE5MTIwOTI1OTAyZiIsIm5iZiI6MTcyMTg4MDI4OS4xMDY2NjIsInN1YiI6IjY1YjczNGJjMGNkMzJhMDE2M2U2Njg4ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.dkkVku5dRYAehWCDKUFb-tnS33ukmIVtY3NcvYdXKTg",
   },
 };
+ export const PlaceHolderForSearch = "Which movie do want to search for?";
+ export const SearchBtnTxt = "Search";

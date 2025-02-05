@@ -4,11 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/fibreBase";
 import { addUser, removeUser } from "../utils/configSlice";
+import { isGptSearch } from "../utils/gptSearchSlice";
+import { HEADER_VALUE, SUPPORTED_LANGUAGES } from "../utils/constant";
+import { selectLang } from "../utils/langSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const UserSelector = useSelector((store) => store.user);
+  const searchOn = useSelector((store) => store.gptSearch);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -48,15 +52,47 @@ const Header = () => {
         console.log("sign out error", error);
       });
   };
+  const handleOnClick = () => {
+    dispatch(isGptSearch());
+  };
 
+  const handleSelect = (e) => {
+    dispatch(selectLang(e.target.value));
+  };
   return (
     <>
       <div className="flex justify-between bg-gradient-to-b from-black  top- items-center p-4">
         <h1 className="text-red-500 font-extrabold font-mono text-3xl p-2 ">
-          WatchFlix
+          {HEADER_VALUE?.company_name}
         </h1>
         {UserSelector && (
           <div className="flex items-center">
+            {searchOn?.isGptSearchOn && (
+              <select
+                className="font-bold bg-red-400 md:px-4 py-1 rounded-sm shadow-inner text-xs px-2"
+                onChange={(e) => {
+                  handleSelect(e);
+                }}
+              >
+                {SUPPORTED_LANGUAGES.map((lang) => (
+                  <option
+                    className="border-r-0 bg-black text-white"
+                    key={lang.identifier}
+                    value={lang.identifier}
+                  >
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+            )}
+            <button
+              className="m-4 py-2 px-4 text-white bg-red-500 rounded-md"
+              onClick={() => {
+                handleOnClick();
+              }}
+            >
+              {HEADER_VALUE?.search_gpt}
+            </button>
             <div className="flex flex-col  gap-3">
               <img
                 className="size-10  m-4 relative rounded-[30%]"
@@ -74,7 +110,7 @@ const Header = () => {
                 handleSignOut();
               }}
             >
-              Sign out
+              {HEADER_VALUE?.sign_out}
             </button>
           </div>
         )}

@@ -11,3 +11,15 @@ export const Api_Option = {
 };
  export const PlaceHolderForSearch = "Which movie do want to search for?";
  export const SearchBtnTxt = "Search";
+
+ export const SUPPORTED_LANGUAGES = [
+   { identifier: "EN_US", name: "English" },
+   { identifier: "HI_IN", name: "Hindi" },
+   { identifier: "GR", name: "Greek" },
+ ];
+
+ export const HEADER_VALUE = {
+   company_name: "WatchFlix",
+   search_gpt: "Gpt Search",
+   sign_out: "Sign out",
+ };
